@@ -8,73 +8,38 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import Game.SetupGame;
+
 public class Menu extends BasicGameState{
 
-	Image fish;
-	boolean inversed = false;
-	float x;
-	float y;
-	float scale;
-	float friction = (float) 0.001;
+	Image play;
 	
-	float fishW, fishH;
-
-	private static final float gravity = (float) 0.001;
-
-	float ySpeed, xSpeed;
+	float playX,playY,playWidth,playHeight;
 
 	@Override
-	public void init(GameContainer cg, StateBasedGame sbg) throws SlickException {
-		fish = new Image("res/clown.png");
-		scale = (float)0.5;
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		play = new Image("res/play.png");
+		playX = gc.getWidth()/3;
+		playY = (float)(gc.getHeight()/1.5);
+		playWidth = play.getWidth();
+		playHeight = play.getHeight();
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		if(inversed){
-			fish.getFlippedCopy(true,false).draw(x, y, scale);
-		}
-		else{
-			fish.draw(x, y, scale);
-		}
-		
+		play.drawCentered(playX	,playY);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input i = gc.getInput();
-		y += ySpeed;
-		if(y+fishH > 550){
-			ySpeed = 0;
-			if(xSpeed>0){
-				xSpeed -= friction;
-			}
-			else if(xSpeed < 0){
-				xSpeed += friction;
+		if(i.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+			int mX = i.getMouseX();
+			int mY = i.getMouseY();
+			if(mX>playX - playWidth/2 && mX < playX + playWidth/2 && mY > playY- playHeight/2 && mY < playY + playHeight/2){
+				sbg.enterState(SetupGame.playID);
 			}
 		}
-		else if(ySpeed < 0.5){
-			ySpeed+=gravity;
-		}
-		if(i.isKeyPressed(Input.KEY_RIGHT)){
-			ySpeed =  (float)-0.4;
-			xSpeed += (float) 0.05;
-			inversed = false;
-		}
-		else if(i.isKeyPressed(Input.KEY_LEFT)){
-			ySpeed =  (float)-0.4;
-			xSpeed -= (float) 0.05;
-			inversed = true;
-		}
-		
-		if(i.isKeyPressed(Input.KEY_SPACE)){
-			scale +=0.02;
-		}
-		
-		x += xSpeed;
-		
-		fishW = fish.getWidth()*scale;
-		fishH = fish.getHeight()*scale;
 	}
 
 	@Override
