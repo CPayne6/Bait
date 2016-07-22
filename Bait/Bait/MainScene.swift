@@ -13,6 +13,8 @@ class MainScene: SKScene{
     
         let gameName1 = SKLabelNode()
         let playb = SKSpriteNode(imageNamed: "playbutton")
+        let homeb = SKSpriteNode(imageNamed: "homebutton")
+        let trophyb = SKSpriteNode(imageNamed: "trophybutton")
     
     override func didMoveToView(view: SKView) {
         
@@ -53,11 +55,10 @@ class MainScene: SKScene{
         let background = SKSpriteNode(imageNamed: "gradientScreen1")
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         background.zPosition = 0
-        background.setScale(1.5)
+        background.setScale(2)
         self.addChild(background)
        
   
-    
         
         playb.position = CGPoint(x: self.size.width/2, y: self.size.height*0.4)
         playb.zPosition = 2
@@ -65,16 +66,22 @@ class MainScene: SKScene{
         playb.setScale(0.4)
         self.addChild(playb)
         
-        let homeb = SKSpriteNode(imageNamed: "homebutton")
+        let fade1 = SKAction.fadeOutWithDuration(1)
+        let fade2 = SKAction.fadeInWithDuration(1)
+        let waitToFade = SKAction.waitForDuration(4)
+        let fadeSequence = SKAction.sequence([waitToFade,fade1,fade2])
+        let fadeForever = SKAction.repeatActionForever(fadeSequence)
+        playb.runAction(fadeForever)
+        
         homeb.position = CGPoint(x: self.size.width*0.6, y: self.size.height*0.35)
         homeb.zPosition = 2
+        homeb.name = "homeButton"
         homeb.setScale(0.3)
         self.addChild(homeb)
         
-        
-        let trophyb = SKSpriteNode(imageNamed: "trophybutton")
         trophyb.position = CGPoint(x: self.size.width*0.4, y: self.size.height*0.35)
         trophyb.zPosition = 2
+        trophyb.name = "trophyButton"
         trophyb.setScale(0.3)
         self.addChild(trophyb)
         
@@ -137,7 +144,7 @@ class MainScene: SKScene{
         let bfish3 = SKSpriteNode(imageNamed: "bfish final")
         bfish3.position = CGPoint(x: self.size.width*0.3, y: self.size.height*0.52)
         bfish3.zPosition = 3
-        bfish3.setScale(0.1)
+        bfish3.setScale(0.2)
         bfish3.alpha = 0
         let fade = SKAction.fadeInWithDuration(1)
         let fishsequence = SKAction.sequence([fade, ])
@@ -168,10 +175,32 @@ class MainScene: SKScene{
                     
                     let myTransition = SKTransition.fadeWithDuration(2)
                     self.view!.presentScene(sceneToMoveTo, transition: myTransition)
-    
-                 
+                    
+                
+                }else if nodeITapped.name == "trophyButton"{
+                        
+                    trophyb.alpha = 0.5
+                    let fadeInAction = SKAction.fadeOutWithDuration(1)
+                    trophyb.runAction(fadeInAction)
+                        
+                    let sceneToMoveTo = TrophyScene (size: self.size)
+                        sceneToMoveTo.scaleMode = self.scaleMode
+                    let myTransition = SKTransition.fadeWithDuration(2)
+                    self.view!.presentScene(sceneToMoveTo, transition: myTransition)
+                    
+                }else if nodeITapped.name == "homeButton"{
+                            
+                    homeb.alpha = 0.5
+                    let fadeInAction = SKAction.fadeOutWithDuration(1)
+                    homeb.runAction(fadeInAction)
+                    let sceneToMoveTo = HomeScene (size: self.size)
+                    sceneToMoveTo.scaleMode = self.scaleMode
+                    let myTransition = SKTransition.fadeWithDuration(2)
+                    self.view!.presentScene(sceneToMoveTo, transition: myTransition)
         
+                }else{
+    
+        }
      }
-   }
- }
+  }
 }
